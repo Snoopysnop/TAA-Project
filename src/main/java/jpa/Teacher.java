@@ -55,11 +55,22 @@ public class Teacher extends User {
     public boolean removeSlot(Date date, TimeSlot timeSlot) {
         for (DateTimeSlot dt : date_availability){
             if(isEqualDate(dt.getDate(), date)) {
-                List<TimeSlot> lt = dt.getTimeSlots();
-                boolean removed = lt.remove(timeSlot);
+                List<TimeSlot> timeSlotList = dt.getTimeSlots();
+                List <TimeSlot> newTimeSlot = new ArrayList<>();
 
-                dt.setTimeSlots(lt);
-                return removed;
+                for (TimeSlot ts : timeSlotList){
+                    if(ts.isTimeSlotContainedInOtherTimeSlot(timeSlot)){
+                        newTimeSlot = timeSlot.sliceTimeSlot(ts);
+                        if(timeSlotList.remove(ts)){
+                            for(TimeSlot element : newTimeSlot){
+                            timeSlotList.add(element);
+                            }
+                            dt.setTimeSlots(timeSlotList);
+                            return true;
+                        }
+                        return false;
+                    }
+                }
             }
         }
         return false;

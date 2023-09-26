@@ -1,6 +1,8 @@
 package jpa;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -61,6 +63,35 @@ public class TimeSlot {
             )
         );
     }
+
+    protected boolean isTimeSlotContainedInOtherTimeSlot(TimeSlot timeSlot){
+        return (this.startHour > timeSlot.getStartHour() || (this.startHour == timeSlot.getStartHour() && this.startMinute >= timeSlot.getStartMinute()))
+        && (this.endHour < timeSlot.getEndHour() || (this.endHour == timeSlot.getEndHour() && this.endMinute <= timeSlot.getEndMinute()));
+    }
+
+    protected List<TimeSlot> sliceTimeSlot(TimeSlot timeSlotToRemove) {
+        List<TimeSlot> result = new ArrayList<>();
+
+        // Si le créneau à supprimer se trouve avant le créneau actuel
+        if (timeSlotToRemove.endHour <= this.startHour || (timeSlotToRemove.endHour == this.startHour && timeSlotToRemove.endMinute <= this.startMinute)) {
+            // Aucun chevauchement, aucun changement nécessaire
+            result.add(new TimeSlot(this.startHour, this.startMinute, this.endHour, this.endMinute));
+        } else if (timeSlotToRemove.startHour >= this.endHour || (timeSlotToRemove.startHour == this.endHour && timeSlotToRemove.startMinute >= this.endMinute)) {
+            // Aucun chevauchement, aucun changement nécessaire
+            result.add(new TimeSlot(this.startHour, this.startMinute, this.endHour, this.endMinute));
+        } else {
+            // Le créneau à supprimer chevauche le créneau actuel, divisez-le en deux créneaux
+            if (timeSlotToRemove.startHour > this.startHour || (timeSlotToRemove.startHour == this.startHour && timeSlotToRemove.startMinute > this.startMinute)) {
+                result.add(new TimeSlot(this.startHour, this.startMinute, timeSlotToRemove.startHour, timeSlotToRemove.startMinute));
+            }
+            if (timeSlotToRemove.endHour < this.endHour || (timeSlotToRemove.endHour == this.endHour && timeSlotToRemove.endMinute < this.endMinute)) {
+                result.add(new TimeSlot(timeSlotToRemove.endHour, timeSlotToRemove.endMinute, this.endHour, this.endMinute));
+            }
+        }
+
+        return result;
+    }
+    
 
     @Id
     @GeneratedValue

@@ -24,6 +24,10 @@ public class AppointmentDao extends Dao<Appointment> {
         // create appointment
         manager.persist(appointment);
     }
+    
+    public void remove(Appointment appointment){
+        
+    }
 
     @Override
     public void update(Appointment appointment) {
