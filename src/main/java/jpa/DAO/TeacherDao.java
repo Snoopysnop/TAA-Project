@@ -12,6 +12,10 @@ import jpa.javaClass.TimeSlot;
 public class TeacherDao extends Dao<Teacher> {
     EntityManager manager = EntityManagerHelper.getEntityManager();
 
+    public TeacherDao(){
+        
+    }
+
     public boolean addTimeSlot(Date date, List<TimeSlot> timeSlots) {
         return false;
     }

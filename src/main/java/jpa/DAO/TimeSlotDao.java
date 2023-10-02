@@ -8,6 +8,7 @@ import jpa.javaClass.TimeSlot;
 public class TimeSlotDao extends Dao<TimeSlot> {
     EntityManager manager = EntityManagerHelper.getEntityManager();
 
+    
     @Override
     public TimeSlot find(long id) {
         return manager.find(TimeSlot.class, id, LockModeType.NONE, null);

@@ -1,4 +1,4 @@
-package jpa;
+package jpa.test;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,6 +6,11 @@ import java.util.Date;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jpa.javaClass.Appointment;
+import jpa.javaClass.EntityManagerHelper;
+import jpa.javaClass.Student;
+import jpa.javaClass.Teacher;
+import jpa.javaClass.TimeSlot;
 
 public class JpaTest {
 
