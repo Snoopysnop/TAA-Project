@@ -19,7 +19,11 @@ package fr.istic.taa.jaxrs;
 import java.util.HashSet;
 import java.util.Set;
 
+import fr.istic.taa.jaxrs.domain.javaClass.TimeSlot;
+import fr.istic.taa.jaxrs.rest.AppointmentResource;
 import fr.istic.taa.jaxrs.rest.PetResource;
+import fr.istic.taa.jaxrs.rest.StudentResource;
+import fr.istic.taa.jaxrs.rest.TeacherResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
@@ -35,6 +39,11 @@ public class TestApplication extends Application {
 
         clazzes.add(OpenApiResource.class);
         clazzes.add(PetResource.class);
+
+        
+        clazzes.add(AppointmentResource.class);
+        clazzes.add(StudentResource.class);
+        clazzes.add(TeacherResource.class);
 //        clazzes.add(AcceptHeaderOpenApiResource.class);
          
 
