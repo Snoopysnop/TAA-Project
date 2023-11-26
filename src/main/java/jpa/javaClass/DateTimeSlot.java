@@ -1,4 +1,4 @@
-package fr.istic.taa.jaxrs.domain.javaClass;
+package jpa.javaClass;
 
 import java.util.ArrayList;
 import java.util.Date;

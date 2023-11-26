@@ -1,4 +1,4 @@
-package fr.istic.taa.jaxrs.dao.myDao;
+package jpa.DAO;
 
 abstract class Dao<T> {
     /**
@@ -15,14 +15,14 @@ abstract class Dao<T> {
      * 
      * @param obj
      */
-    public abstract T create(T obj);
+    public abstract void create(T obj);
 
     /**
      * Permet de mettre à jour les données d'une entrée dans la base
      * 
      * @param obj
      */
-    public abstract T update(T obj);
+    public abstract void update(T obj);
 
     /**
      * Permet la suppression d'une entrée de la base
