@@ -1,10 +1,12 @@
-package jpa.javaClass;
+package fr.istic.taa.jaxrs.domain.javaClass;
+
+import java.io.Serializable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Student extends User {
+public class Student extends User implements Serializable{
 
     @Id
     Long studentNumber;

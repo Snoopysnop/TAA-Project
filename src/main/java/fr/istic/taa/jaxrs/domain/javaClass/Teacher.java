@@ -1,5 +1,6 @@
-package jpa.javaClass;
+package fr.istic.taa.jaxrs.domain.javaClass;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
-public class Teacher extends User {
+public class Teacher extends User implements Serializable{
 
     Long id;
     List<DateTimeSlot> date_availability;

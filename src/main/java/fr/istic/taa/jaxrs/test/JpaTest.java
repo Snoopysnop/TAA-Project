@@ -1,16 +1,16 @@
-package jpa.test;
+package fr.istic.taa.jaxrs.test;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import fr.istic.taa.jaxrs.domain.javaClass.Appointment;
+import fr.istic.taa.jaxrs.domain.javaClass.EntityManagerHelper;
+import fr.istic.taa.jaxrs.domain.javaClass.Student;
+import fr.istic.taa.jaxrs.domain.javaClass.Teacher;
+import fr.istic.taa.jaxrs.domain.javaClass.TimeSlot;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jpa.javaClass.Appointment;
-import jpa.javaClass.EntityManagerHelper;
-import jpa.javaClass.Student;
-import jpa.javaClass.Teacher;
-import jpa.javaClass.TimeSlot;
 
 public class JpaTest {
 

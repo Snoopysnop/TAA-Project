@@ -1,4 +1,4 @@
-package jpa.javaClass;
+package fr.istic.taa.jaxrs.domain.javaClass;
 
 import jakarta.persistence.MappedSuperclass;
 

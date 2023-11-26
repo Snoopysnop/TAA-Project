@@ -1,5 +1,6 @@
-package jpa.javaClass;
+package fr.istic.taa.jaxrs.domain.javaClass;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class TimeSlot {
+public class TimeSlot implements Serializable{
     long id;
     
     int startHour;
@@ -18,9 +19,10 @@ public class TimeSlot {
     int endHour;
     int endMinute;
 
-    Date date;
+    public TimeSlot(){
 
-
+    }
+    
     public TimeSlot(int startHour, int startMinute, int endHour, int endMinute) {
         if(!checkValidityTimeSlot(startHour,startMinute,endHour,endMinute)){
             throw new IllegalArgumentException("Parameters are not valid.");
