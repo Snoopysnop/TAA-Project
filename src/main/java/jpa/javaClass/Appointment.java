@@ -1,6 +1,5 @@
-package fr.istic.taa.jaxrs.domain.javaClass;
+package jpa.javaClass;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;
@@ -10,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Appointment implements Serializable{
+public class Appointment {
     @ManyToOne(cascade = CascadeType.PERSIST)
     Student student;
 
@@ -18,7 +17,6 @@ public class Appointment implements Serializable{
     Teacher teacher;
 
     Date date;
-    
     @ManyToOne
     TimeSlot timeSlot;
 
