@@ -1,5 +1,5 @@
 # TAA - Branche tpRest
-Pour accéder à cette partie, il faudra faire un `git checkout tpServlet`.
+Pour accéder à cette partie, il faudra faire un `git checkout tpRest`.
 Ensuite une fois à la racine du projet, il faudra lancer le serveur de la bdd : `.\run-hsqldb-server.bat` pour windows `.\run-hsqldb-server.sh` pour linux et lancer le serveur ( fichier `RestServer` présent à la racine contenu dans le dossier `\src\main\java\fr\istic\taa\jaxrs`.
 
 Une fois les serveurs lancés vous pouvez tester l'application ici : `http://localhost:8080/` en lançant des requêtes http via postman.
