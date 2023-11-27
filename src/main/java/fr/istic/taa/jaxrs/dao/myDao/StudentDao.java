@@ -47,7 +47,6 @@ public class StudentDao extends Dao<Student> {
             e.printStackTrace();
         }
         
-
         return student;
     }
 

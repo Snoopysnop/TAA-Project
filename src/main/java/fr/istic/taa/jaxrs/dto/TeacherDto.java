@@ -10,7 +10,6 @@ public class TeacherDto implements Serializable{
     private String firstName;
     private String lastName;
     private long id;
-    List<DateTimeSlot> date_availability;
     
 
     
@@ -45,14 +44,6 @@ public class TeacherDto implements Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public List<DateTimeSlot> getDate_availability() {
-        return date_availability;
-    }
-
-    public void setDate_availability(List<DateTimeSlot> date_availability) {
-        this.date_availability = date_availability;
     }
 
 }

@@ -11,9 +11,8 @@ public class AppointmentDto implements Serializable{
     long studentId;
     long teacherId;
     TimeSlot timeSlot;
-    
-
     Date date;
+    
     Long id;
     
     public AppointmentDto(){

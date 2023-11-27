@@ -44,8 +44,16 @@ public class TeacherDao extends Dao<Teacher> {
     @Override
     public Teacher create(Teacher teacher) {
         tx.begin();
-        manager.persist(teacher);
-        tx.commit();
+        try {
+            manager.persist(teacher);
+            tx.commit();
+        } catch (Exception e) {
+            if(tx.isActive() && tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        
         return teacher;
     }
 

@@ -38,23 +38,39 @@ public class StudentResource {
         
     }
 
-    
     @POST
-    public Response createStudent(@RequestBody(description = "student object that needs to be added in the database ", required = true)Student student){
+    @Path("/create")
+    public Response createStudent(@RequestBody(description = "student object that needs to be added in the database ", required = true)StudentDto studentDto){
         
+        StudentDao studentDao = new StudentDao();
+        Student newStudent = studentMapper.mapStudent(studentDto);
+        studentDao.create(newStudent);
+        return Response.ok().entity("Student created").build();
+    }
+
+
+    @PUT
+    @Path("/{id}")
+    public Response updateStudent(@PathParam("id") long id, @RequestBody(description = "Student object that needs to be updated", required = true) StudentDto studentDto) {
+
+        StudentDao studentDao = new StudentDao();
+        Student updatedStudent = studentDao.update(studentMapper.mapStudent(studentDto));
+
+        if (updatedStudent != null) {
+            return Response.ok().entity("Student updated").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Student not found").build();
+        }
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+    public Response deleteStudent(@PathParam("id") long id) {
+        StudentDao studentDao = new StudentDao();
+        Student currentStudent = studentDao.find(id);
+        studentDao.delete(currentStudent);
         
-        StudentDao studentDAO = new StudentDao();
-
-        Student newStudent = studentDAO.create(student);
-
-        if(newStudent != null){    
-            StudentDto studentDto = studentMapper.mapStudentDto(newStudent);
-            
-            return Response.ok().entity(studentDto).build();
-        }
-        else{
-            return Response.status(Response.Status.NOT_FOUND).entity("student can't be created").build();
-        }
+        return Response.ok().entity("Student deleted").build();
     }
 
 }
