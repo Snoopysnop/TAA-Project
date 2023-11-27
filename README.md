@@ -1,149 +1,47 @@
-## JaxRS + openAPI
+# TAA - Branche tpSpring
 
-1. Import this project in your IDE, 
-2. Start the database
-3. Start the database viewer
-4. Start the backend. There is a main class to start the backend
+Pour accéder à cette partie, il faudra faire un git checkout tpSpring.
+Pour cette partie, Il faudra setup la base de donnée. Nous avons fait le choix d'utiliser `MySQL`. Il va falloir modifer le fichier `application.properties` si vous voulez en avoir une autre ou changer des valeurs.
+- Pour la valeur de `spring.datasource.url`, il faut modifier l'url de connexion en fonction du schéma de base de donnée et du port que vous aurez choisi. Dans notre cas, on est sur : `jdbc:mysql://localhost:3306/my_bdd`. 
+- Pour le username : `spring.datasource.username` = `root`
+- Pour le password : `spring.datasource.password` = `admin123`
 
+Une fois la base de donnée mise en place, vous pourrez lancer l'application via le fichier `SampleDataJpaApplication` et tester l'application avec postman à l'adresse : `http://localhost:8080/`.
 
+Pour cette partie, nous avont appris de nos erreurs et nous avons décider de simplifier notre modèle relationnel pour faire une application fonctionnelle et bien comprendre les enjeux et principes de Spring.
+Notre modèle relationnel évolue donc comme suit :
+On a toujours un student mais il n'a qu'un `name`, un `studentNumber` (qui est maintenant généré automatiquement) et une `Liste d'Appointment`.
+Le `teacher` a maintenant un `name` également et une `Liste d'Appointment`.
+L'appointment quand à lui est défini avec un `student`, un `teacher`, une `date`, un `startTime` et un `endTime`.
+Ce modèle étant plus simple à mettre en oeuvre, on a donc réussi à finaliser la partie Spring.
 
+On peut alors avoir des requêtes de tout type comme sur le tpRest (get,post,put,delete). En voici quelques exemples :
 
-# Task Open API Integration 
+- GET : `http://localhost:8080/api/{élément du modèle*}/all` (permet de get tous les {élément du modèle}) ou `http://localhost:8080/{élément du modèle*}/{id}` (permet de get l' {élément du modèle} par son id). 
+- POST : `http://localhost:8080/api/{élément du modèle*}/create` avec le body* associé (permet de créer un {élément du modèle})
+- PUT  : `http://localhost:8080/api/{élément du modèle*}/update/{id}` avec le body* associé (permet d'update un paramètre d'un {élément du modèle})
+- DELETE : `http://localhost:8080/api/{élément du modèle*}/delete/{id}` (permet de supprimer un {élément du modèle})
 
-Now, we would like to ensure that our API can be discovered. The OpenAPI Initiative (OAI) was created by a consortium of forward-looking industry experts who recognize the immense value of standardizing on how REST APIs are described. As an open governance structure under the Linux Foundation, the OAI is focused on creating, evolving and promoting a vendor neutral description format. 
+- Élements du modèle* pour les requètes : 
+    - `students`, 
+    - `teachers`,
+    - `appointments`.
+    
+- Exemple de body* associé aux éléments : 
+    - students : *`{
+            "name": "Lise"
+    }`*
+    - professors : *`{
+            "name": "Fabrice"
+    }`*
+    - appointments : *`{
+        "date": "2023-10-18",
+        "startTime": "15:30:00",
+        "endTime": "18:00:00",
+        "studentId": 1,
+        "professorId": 2
+        }`*
 
-APIs form the connecting glue between modern applications. Nearly every application uses APIs to connect with corporate data sources, third party data services or other applications. Creating an open description format for API services that is vendor neutral, portable and open is critical to accelerating the vision of a truly connected world.
-
-To do this integration first, I already add a dependencies to openAPI libraries. 
-
-```xml
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-jakarta</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-servlet-initializer-v2</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-```
-
-Next you have to add OpenAPI Resource to your application
-
-Your application could be something like that. 
-
-```java
-@ApplicationPath("/")
-public class RestApplication extends Application {
-
-	@Override
-	public Set<Class<?>> getClasses() {
-		final Set<Class<?>> resources = new HashSet<>();
-
-
-		// SWAGGER endpoints
-		resources.add(OpenApiResource.class);
-
-        //Your own resources. 
-        resources.add(PersonResource.class);
-....
-		return resources;
-	}
-}
-```
-
-Next start your server, you must have your api description available at [http://localhost:8080/openapi.json](http://localhost:8080/openapi.json)
-
-### Integrate Swagger UI. 
-
-Next we have to integrate Swagger UI. We will first download it.
-https://github.com/swagger-api/swagger-ui
-
-Copy dist folder content in src/main/webapp/swagger in your project. 
-
-Edit index.html file to automatically load your openapi.json file. 
-
-At the end of the index.html, your must have something like that.
-
-```js
-   // Build a system
-      const ui = SwaggerUIBundle({
-        url: "http://localhost:8080/openapi.json",
-        dom_id: '#swagger-ui',
-        
-        ...
-```
-
-Next add a new resources to create a simple http server when your try to access to http://localhost:8080/api/.
-
-This new resources can be developped as follows
-
-```java
-package app.web.rest;
-
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.util.logging.Logger;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
-@Path("/api")
-public class SwaggerResource {
-
-    private static final Logger logger = Logger.getLogger(SwaggerResource.class.getName());
-
-    @GET
-    public byte[] Get1() {
-        try {
-            return Files.readAllBytes(FileSystems.getDefault().getPath("src/main/webapp/swagger/index.html"));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    @GET
-    @Path("{path:.*}")
-    public byte[] Get(@PathParam("path") String path) {
-        try {
-            return Files.readAllBytes(FileSystems.getDefault().getPath("src/main/webapp/swagger/"+path));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-}
-```
-
-Add this new resources in your application
-
-```java
-@ApplicationPath("/")
-public class RestApplication extends Application {
-
-
-	@Override
-	public Set<Class<?>> getClasses() {
-		final Set<Class<?>> resources = new HashSet<>();
-
-
-		// SWAGGER endpoints
-		resources.add(OpenApiResource.class);
-		resources.add(PersonResource.class);
-        //NEW LINE TO ADD
-		resources.add(SwaggerResource.class);
-
-		return resources;
-	}
-}
-```
-
-Restart your server and access to http://localhost:8080/api/, you should access to a swagger ui instance that provides documentation on your api. 
-
-You can follow this guide to show how you can specialise the documentation through annotations.
-
-https://github.com/swagger-api/swagger-samples/blob/2.0/java/java-resteasy-appclasses/src/main/java/io/swagger/sample/resource/PetResource.java
+Nous avons également implémenté swagger UI dans cette partie.
+Pour y accéder, il faudra se rendre à l'addresse : `http://localhost:8080/swagger-ui/index.html`
+AOP est également implémenté, il permet d'avoir plus de logs pour notre programme.
