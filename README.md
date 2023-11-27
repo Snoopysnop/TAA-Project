@@ -1,149 +1,31 @@
-## JaxRS + openAPI
+# TAA - Branche tpRest
+Pour accéder à cette partie, il faudra faire un `git checkout tpServlet`.
+Ensuite une fois à la racine du projet, il faudra lancer le serveur de la bdd : `.\run-hsqldb-server.bat` pour windows `.\run-hsqldb-server.sh` pour linux et lancer le serveur ( fichier `RestServer` présent à la racine contenu dans le dossier `\src\main\java\fr\istic\taa\jaxrs`.
 
-1. Import this project in your IDE, 
-2. Start the database
-3. Start the database viewer
-4. Start the backend. There is a main class to start the backend
+Une fois les serveurs lancés vous pouvez tester l'application ici : `http://localhost:8080/` en lançant des requêtes http via postman.
+Pour avoir postman il faudra l'installer via internet.
 
+On peut alors avoir des requêtes de tout type (get,post,put,delete). En voici quelques exemples :
+- POST : `http://localhost:8080/student/create` avec le body* associé.
+- GET : `http://localhost:8080/student/{studentNumber}` avec studentNumber qui correspond par exemple celui que l'on vient de créer juste avant.
+- PUT  : `http://localhost:8080/student/{studentNumber}` avec le body* associé. 
+- DELETE : `http://localhost:8080/student/delete/{studentNumber}`
 
+- Exemple de body : 
+    - student : *`{
+        "firstName": "martin",
+        "lastName": "dubois",
+        "studentNumber":19008998
+    }`*
+    - student : *`{
+        "firstName": "jules",
+        "lastName": "dubois",
+        "studentNumber":19008998
+    }`*
 
+On aurait pu prendre d'autres exemples car en collant ce système sur les autres éléments, cela donne un résultat simmilaire mais on a pas eu le temps de faire fonctionner le teacher ( sauf find qui permet de get un teacher avec son id et pareil pour appointment ).
 
-# Task Open API Integration 
+On s'est rendu compte que notre modélisation était vraiment complèxe et donc difficile avec un manque de temps à mettre en oeuvre pour cette partie. On a tout de même réussi à faire fonctionner toutes les requêtes du student. Mais le principe aurait été le même pour les autres.
+On retrouve bien les DAO, DTO, MAPPERS puis controlers.
 
-Now, we would like to ensure that our API can be discovered. The OpenAPI Initiative (OAI) was created by a consortium of forward-looking industry experts who recognize the immense value of standardizing on how REST APIs are described. As an open governance structure under the Linux Foundation, the OAI is focused on creating, evolving and promoting a vendor neutral description format. 
-
-APIs form the connecting glue between modern applications. Nearly every application uses APIs to connect with corporate data sources, third party data services or other applications. Creating an open description format for API services that is vendor neutral, portable and open is critical to accelerating the vision of a truly connected world.
-
-To do this integration first, I already add a dependencies to openAPI libraries. 
-
-```xml
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-jakarta</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-servlet-initializer-v2</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-```
-
-Next you have to add OpenAPI Resource to your application
-
-Your application could be something like that. 
-
-```java
-@ApplicationPath("/")
-public class RestApplication extends Application {
-
-	@Override
-	public Set<Class<?>> getClasses() {
-		final Set<Class<?>> resources = new HashSet<>();
-
-
-		// SWAGGER endpoints
-		resources.add(OpenApiResource.class);
-
-        //Your own resources. 
-        resources.add(PersonResource.class);
-....
-		return resources;
-	}
-}
-```
-
-Next start your server, you must have your api description available at [http://localhost:8080/openapi.json](http://localhost:8080/openapi.json)
-
-### Integrate Swagger UI. 
-
-Next we have to integrate Swagger UI. We will first download it.
-https://github.com/swagger-api/swagger-ui
-
-Copy dist folder content in src/main/webapp/swagger in your project. 
-
-Edit index.html file to automatically load your openapi.json file. 
-
-At the end of the index.html, your must have something like that.
-
-```js
-   // Build a system
-      const ui = SwaggerUIBundle({
-        url: "http://localhost:8080/openapi.json",
-        dom_id: '#swagger-ui',
-        
-        ...
-```
-
-Next add a new resources to create a simple http server when your try to access to http://localhost:8080/api/.
-
-This new resources can be developped as follows
-
-```java
-package app.web.rest;
-
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.util.logging.Logger;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
-@Path("/api")
-public class SwaggerResource {
-
-    private static final Logger logger = Logger.getLogger(SwaggerResource.class.getName());
-
-    @GET
-    public byte[] Get1() {
-        try {
-            return Files.readAllBytes(FileSystems.getDefault().getPath("src/main/webapp/swagger/index.html"));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    @GET
-    @Path("{path:.*}")
-    public byte[] Get(@PathParam("path") String path) {
-        try {
-            return Files.readAllBytes(FileSystems.getDefault().getPath("src/main/webapp/swagger/"+path));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-}
-```
-
-Add this new resources in your application
-
-```java
-@ApplicationPath("/")
-public class RestApplication extends Application {
-
-
-	@Override
-	public Set<Class<?>> getClasses() {
-		final Set<Class<?>> resources = new HashSet<>();
-
-
-		// SWAGGER endpoints
-		resources.add(OpenApiResource.class);
-		resources.add(PersonResource.class);
-        //NEW LINE TO ADD
-		resources.add(SwaggerResource.class);
-
-		return resources;
-	}
-}
-```
-
-Restart your server and access to http://localhost:8080/api/, you should access to a swagger ui instance that provides documentation on your api. 
-
-You can follow this guide to show how you can specialise the documentation through annotations.
-
-https://github.com/swagger-api/swagger-samples/blob/2.0/java/java-resteasy-appclasses/src/main/java/io/swagger/sample/resource/PetResource.java
+    
