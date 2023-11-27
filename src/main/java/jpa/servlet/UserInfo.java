@@ -32,13 +32,6 @@ public void doPost(HttpServletRequest request,
 	String studentLastName = request.getParameter("studentLastName");
 	String studentNumber = request.getParameter("studentNumber");
 	
-	System.out.println("boulouter1 : " + profFirstName);
-	System.out.println("boulouter2 : " + profLastName);
-
-	System.out.println("boulouter3 : " + studentFirstName);
-	System.out.println("boulouter4 : " + studentLastName);
-	System.out.println("boulouter5 : " + studentNumber);
-
 	if(studentFirstName != null && studentLastName != null && studentNumber != null){
 		
 		out.println("<HTML>\n<BODY>\n" +
@@ -56,8 +49,6 @@ public void doPost(HttpServletRequest request,
 		studentDao.create(newStudent);
 	}
 	else if(profFirstName != null && profLastName!=null){
-		System.out.println("JAMBON DE PARIS PAS AU Ru");
-		
 		out.println("<HTML>\n<BODY>\n" +
 				"<H1>Recapitulatif des informations</H1>\n" +
 				"<UL>\n" +			

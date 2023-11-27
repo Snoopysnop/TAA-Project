@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.LockModeType;
 import jpa.javaClass.EntityManagerHelper;
 import jpa.javaClass.Teacher;
@@ -11,7 +12,7 @@ import jpa.javaClass.TimeSlot;
 
 public class TeacherDao extends Dao<Teacher> {
     EntityManager manager = EntityManagerHelper.getEntityManager();
-
+    EntityTransaction tx = manager.getTransaction();
     public TeacherDao(){
         
     }
@@ -27,7 +28,9 @@ public class TeacherDao extends Dao<Teacher> {
 
     @Override
     public void create(Teacher teacher) {
+        tx.begin();
         manager.persist(teacher);
+        tx.commit();
     }
 
     @Override
